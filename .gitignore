@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+
+# 技能运行时产物（不随仓库分发）
+.trae/skills/legado-book-source-tamer/tools/jre/
+.trae/skills/legado-book-source-tamer/temp/
+.trae/skills/legado-book-source-tamer/scripts/temp/
+.trae/skills/legado-book-source-tamer/validator/logs/
+.trae/skills/legado-book-source-tamer/validator/.runtime.json
+.trae/skills/legado-book-source-tamer/validator/validator-cookies.json
+
+# 系统/编辑器
+.DS_Store
+Thumbs.db

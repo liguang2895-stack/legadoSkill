@@ -1,0 +1,52 @@
+[
+  {
+    "bookSourceName": "猫扑小说",
+    "bookSourceUrl": "https://www.mopbook.com",
+    "bookSourceType": 0,
+    "bookSourceGroup": "",
+    "bookSourceComment": "搜索经 rrssk.com（java.ajax 链 + Mock DOM 签名 v17 指纹）；目录经 loadChapterPage 接口（AES 密钥每日轮换→动态提取，分页去重）+ direList 兜底；需 Android UA 过 GoEdge WAF，请勿开代理",
+    "enabledCookieJar": true,
+    "header": "{\"User-Agent\": \"Mozilla/5.0 (Linux; Android 13; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36\"}",
+    "searchUrl": "@js:var host='https://www.rrssk.com';var pageHtml=String(java.ajax(host+'/00PB.html'));var mt=pageHtml.match(/name=\"_t\"\\s+value=\"([^\"]+)\"/);var ms=pageHtml.match(/src=\"([^\"]*action=signJs[^\"]+)\"/);if(!mt||!ms){throw 'rrssk页面结构变化: 未找到_t/signJs';}var t=mt[1];var signUrl=ms[1].indexOf('http')===0?ms[1]:host+ms[1].replace(/&amp;/g,'&');var signJs=String(java.ajax(signUrl));var _toString=Object.prototype.toString;function makeEl(tag){tag=String(tag||'div');return {nodeType:1,nodeName:tag.toUpperCase(),tagName:tag.toUpperCase(),style:{},ownerDocument:null,setAttribute:function(){},getAttribute:function(){return null;},cloneNode:function(){return makeEl(tag);},appendChild:function(c){return c;},addEventListener:function(){},removeEventListener:function(){}};}var fakeDoc={nodeType:9,nodeName:'#document',createElement:function(tag){var el=makeEl(tag);el.ownerDocument=fakeDoc;return el;},createElementNS:function(ns,tag){var el=makeEl(tag);el.ownerDocument=fakeDoc;return el;},getElementsByTagName:function(n){return n==='html'?[fakeDoc.documentElement]:[];},addEventListener:function(){},removeEventListener:function(){}};fakeDoc.documentElement={nodeType:1,nodeName:'HTML',tagName:'HTML',parentNode:null,style:{},contains:function(){return false;}};fakeDoc.documentElement.parentNode=fakeDoc;fakeDoc.body={nodeName:'BODY',nodeType:1};fakeDoc.implementation={};var fakeWin={location:{href:host+'/00PB.html'},addEventListener:function(type,h){try{if(h)h({isTrusted:true,type:type});}catch(e){}}};var fakeNav={userAgent:'Mozilla/5.0 (Linux; Android 13; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36'};Object.prototype.toString=function(){if(this===fakeDoc)return '[object HTMLDocument]';if(this&&this.nodeType===1&&this.nodeName==='DIV')return '[object HTMLDivElement]';return _toString.call(this);};var __SIGN=null;try{var mkSign=eval('(function(document,window,navigator){'+signJs+'\\nreturn window.__SIGN;})');__SIGN=mkSign(fakeDoc,fakeWin,fakeNav);}finally{Object.prototype.toString=_toString;}if(!__SIGN||typeof __SIGN.f!=='function'){throw '签名算法eval失败';}function __enc(x){return encodeURIComponent(x).replace(/[!'()*]/g,function(c){return '%'+c.charCodeAt(0).toString(16).toUpperCase();});}var ts=Math.floor(Date.now()/1000);var sg=String(__SIGN.f(__enc(key),t,ts));if(!sg||sg==='00000000'){throw '签名计算失败(环境校验未通过)';}var body='_t='+t+'&_ts='+ts+'&_s='+sg+'&keyword='+encodeURIComponent(key)+'&page=1';var opt=JSON.stringify({method:'POST',body:body,headers:{'Content-Type':'application/x-www-form-urlencoded','Referer':host+'/00PB.html','Origin':host}});var postUrl=host+'/?action=search,'+opt;var res=String(java.ajax(postUrl));var mq=res.match(/action=find(?:&amp;|&)v=16(?:&amp;|&)q=([^&\"']+)/);var finalUrl=host+'/00PB.html';if(mq){var q=String(mq[1]).replace(/&amp;/g,'&');finalUrl=host+'/?action=find&v=16&q='+q+'&page='+(page>0?page:1);}finalUrl",
+    "exploreUrl": "@js:var nan=[['玄幻','4'],['奇幻','5'],['武侠','6'],['仙侠','7'],['都市','8'],['军事','9'],['历史','10'],['游戏','11'],['体育','12'],['科幻','13'],['诸天无限','14'],['悬疑','15']];var nv=[['古代言情','16'],['仙侠奇缘','17'],['现代言情','18'],['浪漫青春','19'],['玄幻言情','20'],['悬疑推理','21'],['科幻空间','22'],['游戏竞技','23'],['短篇言情','24'],['轻小说','42'],['耽美','40'],['百合','41']];var er=[['原生幻想','25'],['恋爱日常','26'],['衍生同人','27'],['搞笑吐槽','28']];var fil=[];var TITLE=function(t){return {title:String(t),url:'',style:{layout_flexBasisPercent:1.0,layout_justifySelf:'center'}};};var BTN2=function(t,u){return {title:String(t),url:String(u),style:{layout_flexBasisPercent:0.45}};};var FULL=function(t,u){return {title:String(t),url:String(u),style:{layout_flexBasisPercent:1.0,layout_justifySelf:'center'}};};var BTN3=function(t,u){return {title:String(t),url:String(u),style:{layout_flexBasisPercent:0.29}};};fil.push(TITLE('频道'));fil.push(BTN3('男生','/list-1/'));fil.push(BTN3('女生','/list-2/'));fil.push(BTN3('二次元','/list-3/'));fil.push(TITLE('男生分类'));for(var i=0;i<nan.length;i++){fil.push(BTN2(nan[i][0],'/list-'+nan[i][1]+'-{{page}}/'));}fil.push(TITLE('女生分类'));for(var j=0;j<nv.length;j++){fil.push(BTN2(nv[j][0],'/list-'+nv[j][1]+'-{{page}}/'));}fil.push(TITLE('二次元'));for(var k=0;k<er.length;k++){fil.push(BTN2(er[k][0],'/list-'+er[k][1]+'-{{page}}/'));}fil.push(TITLE('排行榜'));fil.push(FULL('总排行榜','/rank.html'));JSON.stringify(fil)",
+    "ruleSearch": {
+      "bookList": ".book-card",
+      "name": ".book-card__title@text",
+      "author": ".book-card__meta-item.0@text##作者：",
+      "kind": ".book-card__meta-item.1@text##分类：",
+      "intro": ".book-card__desc@text",
+      "coverUrl": ".book-card__cover img@src",
+      "bookUrl": "onclick\n@js:var m=String(result).match(/[?&]t=([^&]+)&s=/);var url='';if(m){url=String(java.base64Decode(decodeURIComponent(m[1])));}url"
+    },
+    "ruleExplore": {
+      "bookList": ".rankList li",
+      "name": ".name > a@text",
+      "author": ".author a@text",
+      "bookUrl": ".name > a@href",
+      "kind": ".cate a@text",
+      "lastChapter": ".chapter a@text"
+    },
+    "ruleBookInfo": {
+      "name": "@css:meta[property='og:novel:book_name']@content",
+      "author": "@css:meta[property='og:novel:author']@content",
+      "kind": "@css:meta[property='og:novel:category']@content",
+      "lastChapter": "@css:meta[property='og:novel:latest_chapter_name']@content",
+      "updateTime": "@css:meta[property='og:novel:update_time']@content",
+      "coverUrl": "@css:meta[property='og:image']@content",
+      "intro": "@css:meta[property='og:description']@content"
+    },
+    "ruleToc": {
+      "chapterList": "@js:var bid='';var bm=String(baseUrl).match(/\\/book\\/([A-Za-z0-9]+)/);if(bm)bid=bm[1];var html=String(result);var maxP=1;var re=/<option value=\"([0-9]+)\">/g;var mm;while((mm=re.exec(html))!==null){var v=parseInt(mm[1]);if(v>maxP)maxP=v;}var ckey='';var iv='';var sre=/src=\"([^\"]*\\/templates\\/js\\/[A-Za-z0-9]{20,}\\.js[^\"]*)\"/g;var sm;var cands=[];while((sm=sre.exec(html))!==null){var p=String(sm[1]);if(p.indexOf('http')!==0){if(p.indexOf('//')===0){p='https:'+p;}else{p='https://www.mopbook.com'+p;}}cands.push(p);}for(var ci=0;ci<cands.length;ci++){var jsText='';try{jsText=String(java.ajax(cands[ci]));}catch(e){java.log('TOC_JS_FETCH_ERR');continue;}var km=jsText.match(/new AESCrypt\\('([^']+)'\\)/);var vm=jsText.match(/Utf8\\.parse\\('([^']+)'\\)/);if(km&&vm){ckey=String(km[1]);iv=String(vm[1]);java.log('TOC_KEY_FOUND');break;}}if(!ckey){java.log('TOC_KEY_MISS');}var arr=[];var seen={};var apiOk=false;var failCnt=0;if(ckey&&iv){var cipher=java.createSymmetricCrypto('AES/CBC/PKCS5Padding',ckey,iv);for(var p2=1;p2<=maxP;p2++){var enc=String(cipher.encryptBase64(JSON.stringify({id:bid,page:p2})));var opt=JSON.stringify({method:'POST',body:'data='+enc});var apiUrl='https://www.mopbook.com/index.php?action=loadChapterPage,'+opt;var respText=String(java.ajax(apiUrl));var j=null;try{j=JSON.parse(respText);}catch(e){java.log('TOC_API_PARSE_ERR:'+respText.substring(0,100));j=null;}if(!j){failCnt++;java.log('TOC_API_FAIL_P'+p2+':'+respText.substring(0,150));continue;}if(j.code!=0){failCnt++;java.log('TOC_API_CODE'+j.code+':'+String(j.msg||''));continue;}if(!j.data){failCnt++;java.log('TOC_API_NODATA_P'+p2);continue;}apiOk=true;for(var i=0;i<j.data.length;i++){var u=String(j.data[i].chapterurl);if(seen[u])continue;seen[u]=1;arr.push({o:parseInt(j.data[i].chapterorder),t:String(j.data[i].chaptername),u:u});}}}if(!apiOk||failCnt>0){java.log('TOC_FALLBACK_DIRELIST');var dm=html.match(/<div class=\"direList[^\"]*\">[\\s\\S]*?<\\/div>\\s*<\\/div>/g);if(dm){for(var d=0;d<dm.length;d++){var links=dm[d].match(/<a href=\"([^\"]+)\" title=\"([^\"]+)\">/g);if(!links)continue;for(var l=0;l<links.length;l++){var lm=links[l].match(/href=\"([^\"]+)\" title=\"([^\"]+)\"/);if(!lm)continue;var u2=String(lm[1]);if(seen[u2])continue;seen[u2]=1;var nm=u2.match(/-([0-9]+)(?:-[0-9]+)?\\.html/);var o2=nm?parseInt(nm[1]):999999;arr.push({o:o2,t:String(lm[2]),u:u2});}}}}arr.sort(function(a,b){return a.o-b.o;});var out=[];for(var k=0;k<arr.length;k++){out.push(JSON.stringify({title:arr[k].t,url:arr[k].u}));}out",
+      "chapterName": "$.title",
+      "chapterUrl": "$.url"
+    },
+    "ruleContent": {
+      "content": ".content@html",
+      "nextContentUrl": "text.下一页@href"
+    },
+    "lastUpdateTime": 0,
+    "customOrder": 0,
+    "enabled": true,
+    "enabledExplore": true
+  }
+]

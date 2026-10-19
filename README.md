@@ -40,7 +40,7 @@ Legado书源驯兽师是一个基于大语言模型的智能书源开发辅助�
 
 ```bash
 # 克隆项目
-git clone https://github.com/mctiantian2501314/legadoSkill.git
+git clone https://github.com/liguang2895-stack/legadoSkill.git
 
 # 进入项目目录
 cd legadoSkill
@@ -61,7 +61,10 @@ pip install -r debugger/requirements.txt
 ```
 legadoSkill/
 ├── .trae/skills/legado-book-source-tamer/
-│   └── SKILL.md                    # 技能包核心文件
+│   ├── SKILL.md                    # 技能包核心文件
+│   ├── references/                 # 规则语法、模板、坑表、验证策略与真实案例
+│   ├── scripts/                    # 抓取/静态审计/真引擎验证/知识库检索
+│   └── validator/                  # 内嵌 validator（JRE 首次运行自动下载）
 ├── assets/                         # 知识库资源
 │   ├── legado_knowledge_base.md    # 完整知识库
 │   ├── css选择器规则.txt           # CSS选择器规则
