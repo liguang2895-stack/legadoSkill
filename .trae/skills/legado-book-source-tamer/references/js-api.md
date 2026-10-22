@@ -224,6 +224,59 @@ var sg = String(__SIGN.f(__enc(key), t, ts));
 
 **会话绑定**：搜索类接口常把 `_t` 与 PHPSESSID 绑定——GET 拿 `_t` 和 POST 必须**同一会话**（书源 `enabledCookieJar: true` + java.ajax 自动管理 CookieJar）。
 
+### 终局方案：注入式守卫绕过（★ 军备竞赛反复失效时应立刻转用）
+
+补指纹只是**过渡**：轮换型签名站会每日加指纹项（实测 rrssk 5 天内 31→44 分），Mock DOM 永远慢一拍。
+长期方案是**读守卫的规则，不模拟环境**：
+
+1. **提取守卫变量与要求值**（三种常见形态全覆盖）：
+   ```js
+   var inj='';
+   var g1=src.match(/typeof\s+([A-Za-z_$][\w$]*)\s*!==?\s*["']number["']\s*\|\|\s*\1\s*!==?\s*(\d+)/);
+   if(g1){inj+=g1[1]+'='+g1[2]+';';}
+   var gr=/if\s*\(\s*([A-Za-z_$][\w$]*)\s*!==\s*(\d+)\s*\)\s*\{?\s*return\s*["']00000000["']/g;
+   var gm;while((gm=gr.exec(src))!=null){if(inj.indexOf(gm[1]+'=')<0){inj+=gm[1]+'='+gm[2]+';';}}
+   var g4=src.match(/([A-Za-z_$][\w$]*)\s*!==\s*(\d+)\s*\?\s*["']00000000["']/);
+   if(g4&&inj.indexOf(g4[1]+'=')<0){inj+=g4[1]+'='+g4[2]+';';}
+   ```
+2. **注入位置**：`window["__"+"SIGN"]=` 赋值之前（兜底锚点：`function \w+\(s,t,ts\)`、探针 IIFE `(function(){var X=[`）。
+   必须在所有 `_score+=` 测量代码**之后**，否则会被覆盖。
+3. **为什么"赋值注入"而不是"条件空改"**：指纹分常**参与签名哈希**（实测 `a8 ^= (_score*7+3)`）——
+   只跳过检查，哈希仍按错误分数算出，服务端照样拒；注入正确值才让守卫与哈希同时正确。
+4. **第二道防线**：`signJs.replace(/if\s*\(\s*[^()]*!==\s*\d+[^()]*\)/g,'if(false)')` 再试
+   （保持 `if(...)→if(false)` 等括号结构，花括号安全；只针对含 `!==数字` 的 if 头）。
+5. **诱饵警报**：签名 JS 可能内置 `var _decoy=function(){return "00000000"}` / `__SIGN_DECOY` 死代码，
+   "全局替换 00000000" 式绕过会上钩；变量注入式不受影响。
+6. **Mock DOM 降级**：用注入式后，mock 只需**执行不抛异常**，不再需要精确得分——对任何指纹增删免疫。
+7. **诊断**：`java.log('INJECT:'+inj)`（应非空）与 `SIG_OK`——真机失效时从日志直接判断正则漏了哪种守卫形态。
+   落地模板见案例《猫扑小说》v18 searchUrl（`__collect/__anchor/__injectAt/__exec` 四函数 + 第二道防线）。
+
+## 302 跳转：让主请求跟随，别在响应体里捞 URL（★ 搜索偶发为空的经典坑）
+
+**症状**：某些关键词能搜、某些返回空列表；日志显示 POST 成功但最终 URL 回退到首页。
+
+**根因**：搜索 POST 常 302 到 `?action=find&...&q=<token>&page=1`。该 URL **只存在于 Location 头**，
+响应体里没有。若源内用 `java.ajax` 自己 POST 再正则从响应 HTML 捞 URL：
+- 结果多（出现翻页链接）→ 翻页链接把 URL 泄进 body → 侥幸成功；
+- 结果少（单页无翻页）→ 捞不到 → 回退首页 → 空列表。
+看起来"某些关键词坏了"，实际是"**结果数**决定了成败"。
+
+**正确做法**：searchUrl 只负责算签名并**返回 `URL + ',' + options`**，把 POST 交给 Legado 主请求：
+
+```js
+var body = 'keyword=' + enc + '&_t=' + encodeURIComponent(t) + '&_ts=' + ts + '&_s=' + encodeURIComponent(sig);
+var bjs = "var s=''+result;var pn=page;if(pn>1){/* 从结果页提 action=find&v= 片段拼 &page=N 再 java.ajax */}else{s;}";
+var opt = ',' + JSON.stringify({method:'POST', body:body, headers:{Referer:BASE+'/00PB.html'}, bodyJs:bjs});
+BASE + '/?action=search' + opt;
+```
+
+- 主请求自动跟随 302；`bodyJs` 在**最终响应体**上求值（源码 AnalyzeUrl.kt:507），`result`=响应体、`page`=页码。
+- 注意 options 前必须带**逗号**（`URL,{...}` 格式）。
+- 只有 POST body 是 form 且**不要设 Content-Type**，Legado 才会按表单编码（见上文 POST 编码规则）。
+
+**验证要忠实引擎**：用 Jsoup 解析 + 真实执行规则体，不要正则扫原始 HTML——
+`onclick="...&amp;t=..."` 经 Jsoup 属性取值已反转义，正则直扫会误判"取不到 t="。
+
 ## 动态密钥/IV 轮换（★ 每日换密钥的 API 站必读）
 
 **特征**：详情页引用一个**随机名 JS 文件**（如 `/templates/js/7M1GcU9Yk1yJcTNE3AEOsIIGEj5DnmN.js`），

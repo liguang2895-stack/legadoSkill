@@ -64,7 +64,7 @@ HTML 分析本身也可直接用 Read 读已保存的 HTML 文件 + Grep 定位�
 | 页面含 "Just a moment" / CF 盾 / 需登录 | WebView 过盾或登录态处理（优先看能否绕开接口） | `references/webview-login-notes.md`、`references/pitfalls.md` 第三节 |
 | 列表/正文靠 XHR JSON | API 发现三步法 | `references/api-discovery.md` |
 | 内容 JS 动态渲染、直接抓不到 | WebView 动态加载 | `references/dynamic-loading.md` |
-| 页面引用**随机名 JS**（如 `/templates/js/<32位>.js`）/ 签名函数 / API 昨天通今天 `code:-1` | **动态密钥/签名站**：密钥每日轮换，必须运行时提取（正则抓随机名 JS 里的密钥）；搜索签名用 Mock DOM 执行 signJs；反爬站一律 `java.ajax` | `references/js-api.md`（动态密钥/Mock DOM 两节）、`references/case-studies/猫扑小说-案例笔记.md` |
+| 页面引用**随机名 JS**（如 `/templates/js/<32位>.js`）/ 签名函数 / API 昨天通今天 `code:-1` | **动态密钥/签名站**：密钥每日轮换，必须运行时提取（正则抓随机名 JS 里的密钥）；搜索签名用**注入式守卫绕过**（Mock DOM 只保执行、不追精确指纹——每日轮换站补指纹必输）；反爬站一律 `java.ajax` | `references/js-api.md`（动态密钥/Mock DOM/终局方案三节）、`references/case-studies/猫扑小说-案例笔记.md` |
 
 ## 三阶段生成流程
 
@@ -198,7 +198,7 @@ python scripts/kb_query.py --show <文件名>      # 展示某个案例全文
 | 案例 | 类型 | 看什么 |
 |------|------|--------|
 | `圈圈粉订阅源.json` + `圈圈粉-案例笔记.md` | 订阅源（WordPress 博主站） | 完整成品 + 迭代史（格式误判/ruleDescription 陷阱/封面多值/视频内嵌/转义坑） |
-| `猫扑小说.json` + `猫扑小说-案例笔记.md` | 书源（rrssk 合作站：签名搜索 + 每日换密钥 API + GoEdge WAF） | 搜索三步链 + Mock DOM 签名、两段式属性规则、动态密钥提取、分页重叠去重、兜底排序、validator 误报识别、Rhino 验证台实测数据 |
+| `猫扑小说.json` + `猫扑小说-案例笔记.md` | 书源（rrssk 合作站：签名搜索 + 每日换密钥 API + GoEdge WAF） | 搜索三步链 + **注入式守卫绕过签名（v18 终局方案）**、两段式属性规则、动态密钥提取、分页重叠去重、兜底排序、validator 误报识别、Rhino 验证台实测数据 |
 
 ## 工具补充：Rhino 规则级验证台（validator 误报/受限时的替代证据）
 
